@@ -1,0 +1,43 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Stack } from '@mui/material';
+
+
+
+import Logo from "../assets/images/RedGym_Logo.png";
+
+
+
+const Navbar = () => {
+  return (
+    <Stack direction="row"  justifyContent="space-around" sx={{ gap: { sm: '122px' , xs : '40px' , } , mt: { 
+      sm : '32px' , xs : '20px'  } , justifyContent : 'none' }} px='20px' >  
+      <Link >
+        <img src={Logo} style={{ width:'70px' , height:'70px' , margin:'10px 20px -20px 20px' }}  />
+      </Link>
+
+      {/* Nav Bar */}
+        <Stack direction="row" gap="40px"  fontSize="24px" alignItems="flex-end">
+
+          <Link to="/" style={{ 
+            textDecoration: 'none' , color:'#3A1212' , borderBottom: '3px solid #FF2625'
+          }} >Home</Link>
+
+
+          <a href="#exercises" style={{
+            textDecoration: 'none' , color:'#3A1212'
+          }} > Exercices </a>
+
+
+
+          <Link to="/Calculators"  style={{ 
+            textDecoration: 'none' , color:'#3A1212' ,
+             
+          }} >Calculators</Link>
+        </Stack>
+    </Stack>
+    
+  );
+}
+
+export default Navbar

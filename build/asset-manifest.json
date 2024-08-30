@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.27d2090b.css",
+    "main.js": "/static/js/main.05f8a4c6.js",
+    "static/media/banner 3.jpeg": "/static/media/banner 3.23aac03ed1a6bbc6eb58.jpeg",
+    "static/media/RedGym_Logo.png": "/static/media/RedGym_Logo.1c95700eef0b395bcfbd.png",
+    "index.html": "/index.html",
+    "main.27d2090b.css.map": "/static/css/main.27d2090b.css.map",
+    "main.05f8a4c6.js.map": "/static/js/main.05f8a4c6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.27d2090b.css",
+    "static/js/main.05f8a4c6.js"
+  ]
+}

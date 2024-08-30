@@ -1,5 +1,5 @@
 {
-  "name": "gold_gym",
+  "name": "red_gym",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +12,8 @@
     "react-horizontal-scrolling-menu": "^2.7.1",
     "react-loader-spinner": "^6.0.0-0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5"
   },
   "scripts": {
     "start": "react-scripts start",

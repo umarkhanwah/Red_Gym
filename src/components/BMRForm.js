@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Stack, Box, Typography, Button, TextField, Select, MenuItem, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Card, IconButton, Fade, CardContent } from '@mui/material';
 import { Grid } from 'react-loader-spinner';
+import { Stack, Box, Typography, Button, TextField, Select, MenuItem, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Card, CardContent,Fade, IconButton } from '@mui/material';
 import DangerousIcon from '@mui/icons-material/Dangerous';
-import { ThumbDownAltOutlined, ThumbUpAlt, ThumbUpAltOutlined, ThumbUpAltRounded } from '@mui/icons-material';
-// import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import Zoom from '@mui/material/Zoom';
+import { ThumbDownAltOutlined, ThumbUpAlt , ThumbUpAltOutlined, ThumbUpAltRounded } from '@mui/icons-material';
+import Zoom from '@mui/material/Zoom';  
 import { styled } from '@mui/material/styles';
+
+
+
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   margin: '0',
@@ -44,14 +46,7 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
 
 
 
-
-
-const BMIForm = () => {
-  
-  
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
+const BMRForm = () => {
   const [gender, setGender] = useState('');
   const [age, setAge] = useState('');
   const [heightCm, setHeightCm] = useState('');
@@ -60,13 +55,13 @@ const BMIForm = () => {
   const [heightUnit, setHeightUnit] = useState('cm');
   const [weight, setWeight] = useState('');
   const [weightUnit, setWeightUnit] = useState('kg');
-  const [bmiResult, setBmiResult] = useState(null);
+  const [bmrResult, setBmrResult] = useState(null);
 
-  // const handleGenderChange = (event) => setGender(event.target.value);
+  const handleGenderChange = (event) => setGender(event.target.value);
   const handleHeightUnitChange = (event) => setHeightUnit(event.target.value);
   const handleWeightUnitChange = (event) => setWeightUnit(event.target.value);
 
-  const calculateBMI = () => {
+  const calculateBMR = () => {
     let heightInCm = heightCm;
     let weightInKg = weight;
 
@@ -80,12 +75,16 @@ const BMIForm = () => {
       weightInKg = parseFloat(weight) * 0.453592;
     }
 
-    // Calculate BMI
-    const heightInMeters = heightInCm / 100;
-    const bmi = weightInKg / (heightInMeters * heightInMeters);
+    // Calculate BMR using Harris-Benedict Equation
+    let bmr;
+    if (gender === 'male') {
+      bmr = 88.362 + (13.397 * weightInKg) + (4.799 * heightInCm) - (5.677 * age);
+    } else {
+      bmr = 447.593 + (9.247 * weightInKg) + (3.098 * heightInCm) - (4.330 * age);
+    }
 
-    // Set the BMI result
-    setBmiResult(bmi.toFixed(2));
+    // Set the BMR result
+    setBmrResult(bmr.toFixed(2));
   };
 
   return (
@@ -99,17 +98,14 @@ const BMIForm = () => {
         mx: 'auto',
       }}
     >
-       
       <Stack spacing={2}>
 
         <Typography variant="h4" component="h2" fontWeight="bold">
-          BMI Calculator
+          BMR Calculator
         </Typography>
         <Typography variant="body2" color="textSecondary">
           Enter Values & Click Calculate Button to get results
         </Typography>
-
-
 
         <FormControl component="fieldset" sx={{ mt: 3 }}>
         <FormLabel component="legend" sx={{ fontWeight: 'bold', color: 'black', mb: 2 }}>
@@ -136,7 +132,8 @@ const BMIForm = () => {
           />
         </RadioGroup>
       </FormControl>
-    
+      
+
         <TextField
           label="Age"
           type="number"
@@ -230,123 +227,56 @@ const BMIForm = () => {
               color: '#FF0E73',
             },
           }}
-          onClick={calculateBMI}
+          onClick={calculateBMR}
         >
           Calculate
         </Button>
 
-
-
-          {bmiResult ?  (
-        <Card variant="outlined" sx={{ mt: 3 }}>
-
-
-          <CardContent sx={{display : "flex" ,justifyContent : "space-between"}}>
-
-            <Box width='60%'>
-
-          <Typography variant="h5"   marginBottom={1}   component="h2">
-                Your BMI is: {bmiResult}
-                </Typography>
-                <hr />
-                <Typography marginTop={1}  marginLeft={1} sx={bmiResult > 24.9 || bmiResult < 18.5 ? {color:'red'} : {color: 'blue'} }>
-                You are   {/*   {bmiResult > 24.9 ? 'overWeight ⬆' : ( bmiResult < 18.5 ? 'underweight ⬇' : 'Normal')}
-                    */}
-                    {bmiResult > 40
-  ? 'Morbidly Obese 🛑'
-  : bmiResult > 35
-  ? 'Severely Obese ⚠️'
-  : bmiResult > 30
-  ? 'Obese 🔴'
-  : bmiResult > 24.9
-  ? 'Overweight ⬆'
-  : bmiResult >= 18.5
-  ? 'Normal'
-  : bmiResult >= 17
-  ? 'Mildly Underweight ⬇'
-  : bmiResult >= 16
-  ? 'Moderately Underweight ⬇⬇'
-  : 'Severely Underweight ⬇⬇⬇'}
-                </Typography>
-                    
-                    
-                    
-
-                  </Box>
-         
-          <IconButton onClick={()=>{  setBmiResult(0) }}  md={6}>
-                  {bmiResult > 24.9 || bmiResult < 18.5 ? (
-                  <Zoom in={true} timeout={800}>
-                    <DangerousIcon fontSize="large" sx={{ color: 'red' }} />
-                  </Zoom>
-                  ) : (
-                    <Fade in={true} timeout={800}>
-
-                    <ThumbUpAlt fontSize="large" color='primary' />
-                    
-                    </Fade>
-                  )}
-                </IconButton>
-          </CardContent>
-          {/* <CardHeader
-            action={
-              <IconButton>
-                  {bmiResult > 24.9 || bmiResult < 18.5 ? (
-                  <Zoom in={true} timeout={800}>
-                    <DangerousIcon fontSize="large" sx={{ color: 'red' }} />
-                  </Zoom>
-                  ) : (
-                    <Fade in={true} timeout={800}>
-
-                    <ThumbUpAlt fontSize="large" color='primary' />
-                    
-                    </Fade>
-                  )}
-                </IconButton>
-            }
-            title={
-              <Typography variant="h5" fontFamily="cursive" component="h2">
-                Your BMI is: {bmiResult}
-              </Typography>
-            }
-          /> */}
-
-
-         
-         
-        </Card>
-      ) : ""}
-
-
-  {/* {bmiResult && (
-<Card variant='outlined' color='red'>
-  <CardHeader
-  action={
-    <IconButton>
-    {(bmiResult > 24.9 || bmiResult < 18.5) ? (
-      <DangerousIcon fontSize='large' sx={{ color: 'red' }} />
-    ) : (
-      <ThumbUpAltRounded fontSize='large' color='primary' />
-    )}
-  </IconButton>
-  }
-    title={
-          <Typography variant="h5" fontFamily='cursive' component="h2" >
-            Your BMI is: {bmiResult}
-          </Typography>
-
-    }
-  />
-
-
-        </Card>
-        )} */}
+        {bmrResult ? (
+  <Card variant="outlined" sx={{ mt: 3 }}>
+    <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box width='60%'>
+        <Typography variant="h5" marginBottom={1} component="h2">
+          Your BMR is: {bmrResult}
+        </Typography>
+        <hr />
+        <Typography marginTop={1} marginLeft={1} sx={bmrResult > 2500 || bmrResult < 1500 ? {color:'red'} : {color: 'blue'}}>
+          
+        {bmrResult > 3000
+  ? 'Very High Metabolism 🚀'
+  : bmrResult > 2500
+  ? 'High Metabolism ⚡'
+  : bmrResult >= 2000
+  ? 'Above Average Metabolism 💪'
+  : bmrResult >= 1500
+  ? 'Average Metabolism 👍'
+  : bmrResult >= 1200
+  ? 'Below Average Metabolism ⚖️'
+  : bmrResult >= 1000
+  ? 'Low Metabolism 🐢'
+  : 'Very Low Metabolism 💤'}
+        </Typography>
+      </Box>
+      
+      <IconButton onClick={() => { setBmrResult(0); }} md={6}>
+        {bmrResult > 2500 || bmrResult < 1500 ? (
+          <Zoom in={true} timeout={800}>
+            <DangerousIcon fontSize="large" sx={{ color: 'red' }} />
+          </Zoom>
+        ) : (
+          <Fade in={true} timeout={800}>
+            <ThumbUpAlt fontSize="large" color='primary' />
+          </Fade>
+        )}
+      </IconButton>
+    </CardContent>
+  </Card>
+) : ""}
 
 
       </Stack>
-        
     </Box>
   );
 };
 
-export default BMIForm;
+export default BMRForm;

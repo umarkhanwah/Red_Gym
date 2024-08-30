@@ -1,13 +1,13 @@
 body {
     font-family: 'Josefin Sans';
     background-color: #FFFAFB;
+    scroll-behavior: smooth;
   }
   
   * {
     padding: 0px;
     margin: 0px;
     box-sizing: border-box;
-    scroll-behavior: smooth;
   }
   
   ::-webkit-scrollbar {

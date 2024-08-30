@@ -10,6 +10,7 @@ import  Footer from './components/Footer';
 import Home  from './pages/Home';
 import ExerciseDetail  from './pages/ExerciseDetail';
 import { Calculator } from './pages/Calculator';
+import Sign_in from './pages/Sign_in';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/exercise/:id' element={<ExerciseDetail />} />
             <Route path='/calculators' element={<Calculator />} />
+            <Route path='/Sign-in' element={<Sign_in />} />
         </Routes>
         <Footer />
     </Box>

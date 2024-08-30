@@ -7,7 +7,7 @@ import { Box , Stack , Typography } from '@mui/material';
 import { exerciseOptions , fetchData } from '../utils/fetchData';
 import ExerciseCard from './ExerciseCard';
 
-const Exercises = ({exercises , setExercises , bodyPart}) => {
+const Exercises = ({exercises , setExercises , bodyPart , forms}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const exercisesPerPage = 2;
 
@@ -45,16 +45,19 @@ useEffect(() => {
       sx={{ mt: { lg: "110px"  }  }} mt="50px" pt="20px"
     >
       <Typography variant="h3" mb="46px" pl="2vw">
-        Showing Results
+        
+          {forms? "Calculators" : "Showing Results" }
       </Typography>
 
       <Stack  direction="row" sx={{ gap: { lg : "110px" , xs : "50px" } }}
         flexWrap="wrap" justifyContent="center">
           {currentExercises.map((exercise , index)=> (
+            <ExerciseCard forms={forms}  key={index} exercise={exercise} />
               
-              <ExerciseCard key={index} exercise={exercise} />
-
           ))} 
+
+              
+
 
       </Stack>
       <Stack mt="100px" alignItems="center" > 

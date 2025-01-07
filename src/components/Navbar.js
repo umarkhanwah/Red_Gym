@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Stack, Typography } from '@mui/material';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
@@ -14,6 +14,11 @@ const Navbar = () => {
   const handleLinkClick = (path) => {
     setActiveLink(path);
   };
+
+
+  useEffect(()=>{
+    window.scrollTo({top:10  , behavior : 'smooth'})
+  } , [location])
 
   return (
     <Stack
@@ -74,7 +79,7 @@ const Navbar = () => {
         <CalculateRoundedIcon fontSize="large" />
         </Link>
         <Link
-          to="/Sign-in"
+          to="/Signin"
           style={{
             textDecoration: 'none',
             color: '#3A1212',

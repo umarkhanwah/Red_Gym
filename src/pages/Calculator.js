@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import BMIForm from '../components/BMIForm'
-import bodyPart from '../components/bodyPart'
-import { Box, Button, ButtonGroup, Container , Grid , Paper, Typography } from '@mui/material'
+
+import {  Container  } from '@mui/material'
 
 import Exercises from '../components/Exercises'
-import Footer from '../components/Footer'
+
 
 import BMRForm from '../components/BMRForm'
 import BodyFatCalculator from '../components/BodyFatCalculator'

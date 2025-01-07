@@ -42,8 +42,8 @@ const App = () => {
         <Route path='/Signin' element={<Sign_in />} />
         <Route path='/Dashboard' element={<AdminLayout />} />
       </Routes>
+      {!hideNavbarPaths.includes(location.pathname) && <Footer />}
 
-      <Footer />
     </Box>
   );
 };

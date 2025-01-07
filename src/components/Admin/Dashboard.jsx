@@ -28,14 +28,34 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
   const navigate  = useNavigate()
-  const location  = useLocation()
+  
   const authToken = localStorage.getItem('authToken')
  
   const [PaidTrainees, setPaidTrainees] = useState([])
   const [AbsentTrainees, setAbsentTrainees] = useState([])
-  const [Trainees, setTrainees] = useState([])
+  const [UnpaidTrainees, setUnpaidTrainees] = useState([])
   const [PresentTrainees, setPresentTrainees] = useState([])
-    
+  const [SearchQuery, setSearchQuery] = useState(""); // State for search query
+  
+   
+  const handleSearch = (e) => {
+      const query = e.target.value.toLowerCase();
+      setSearchQuery(query);
+
+      if (query === "") {
+          fetchAbsentTrainees()
+      } else {
+          const filtered = AbsentTrainees.filter(trainee =>
+              trainee.name.toLowerCase().includes(query) || 
+              trainee.rollNumber.toString().includes(query) || 
+              (trainee.phone && trainee.phone.includes(query))
+          );
+          setAbsentTrainees(filtered);
+      }
+  };  
+
+
+
   const markAttendance = (trainee) => {
     const date = new Date(Date.now());
 
@@ -62,7 +82,7 @@ const Dashboard = () => {
     .then(
       (res)=>{ 
         console.log(res.data);
-        setPresentTrainees(res.data)
+        setPresentTrainees(res.data.trainees)
         
         
       }
@@ -72,7 +92,7 @@ const Dashboard = () => {
     axios.get('http://localhost:4000/admin/PaidFeesTrainees' , {headers : {'authToken' : authToken}})
     .then(
       (res)=> {
-        setPaidTrainees(res.data);
+        setPaidTrainees(res.data.trainees);
         console.log( "Paid Trainees",res.data);
         
       }
@@ -80,18 +100,19 @@ const Dashboard = () => {
   }
 
 
-  const fetchTrainees = ()=>{
+  const fetchUnPaidTrainees = ()=>{
 
     if(!authToken){
       return navigate('/signin')
     }
 
-    axios.get('http://localhost:4000/admin/fetchTrainees' , {headers : {'authToken' : authToken}})
+    axios.get('http://localhost:4000/admin/fetchUnpaidFeesTrainees' , {headers : {'authToken' : authToken}})
     .then((res)=>{
-      setTrainees(res.data.trainees);
-      console.log(res.data);
+      setUnpaidTrainees(res.data.unpaidTrainees);
+      console.log(res.data.message);
     })
     .catch((e)=>console.log(e.response))
+
   }
   const fetchAbsentTrainees = ()=>{
 
@@ -109,7 +130,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchPresentTrainees();
-    // fetchTrainees();
+    fetchUnPaidTrainees();
     fetchAbsentTrainees();
     fetchPaidTrainees();
   }, [])
@@ -153,7 +174,7 @@ const Dashboard = () => {
   
     const chartData2 = createChartData(
       ["Paid", "Unpaid"],
-      [PaidTrainees.length, 50],
+      [PaidTrainees.length, UnpaidTrainees.length],
       ["#FF2625", "#FFC107"]
       
     );
@@ -165,11 +186,26 @@ const Dashboard = () => {
     );
 
 
+    const checkFeeStatus = (data) => {
+      
 
+      const Paid = PaidTrainees.filter(trainee =>
+          trainee._id == data._id
+      );
+      console.log("fee status" ,Paid);
+      
+      if(Paid.length > 0){
+        return false
+      }else if(checkDate(data.joinDate)){
+          return true
+      }
+      return false
+     
+  }; 
   const checkDate = (date)=>{
       const today = new Date( Date.now());
       date = new Date(date);
-      console.log(date.getDate());
+      
       
       return (today.getDate() >= date.getDate()) 
     }
@@ -201,50 +237,62 @@ const Dashboard = () => {
           ))}
         </Grid>
 
-      <Typography variant="h4" color="error" fontWeight="bold" marginY={5} textAlign='center'>Mark Attendance 👇</Typography>
-
+      <Typography variant="h4" color="error" fontWeight="bold" marginTop={4} marginBottom={2} textAlign='center'>Mark Attendance 👇</Typography>
+            
+        <TextField
+            fullWidth
+            label="Search Trainee"
+            value={SearchQuery}
+            onChange={handleSearch}
+        />
+                                     
+                                 
         <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: "#f5f5f5" }}>
-                <TableCell>Roll No.</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Phone</TableCell>
-                
-                <TableCell>Fee Status</TableCell>
-                <TableCell>Mark</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {AbsentTrainees.map((trainee, index) => (
-                <TableRow
-                  key={index}
-                  
-                  sx={{
-                    "&:nth-of-type(odd)": { bgcolor: "#fafafa" },
-                    "&:hover": { bgcolor: "#f0f0f0" },
-                    
-                  }}
-                  
-                >
-                  <TableCell>{trainee.rollNumber}</TableCell>
-                  <TableCell>{trainee.name}</TableCell>
-                  <TableCell>{trainee.phone } </TableCell>
-                  
-                  <TableCell >{checkDate(trainee.joinDate) ? "Pending ... " : "Paid"}</TableCell>
-                  <TableCell>
-                    <Button variant='contained' 
-                    color={checkDate(trainee.joinDate) ?'error' : "primary"}  
-                    sx={{borderRadius:"100px" }} 
-                    
-                      onClick={()=>markAttendance(trainee._id)}
-                    ><Check /></Button>
+          {AbsentTrainees.length == 0 ? <Typography padding={2} variant='h5'  textAlign='center'> No Absent Trainees 🙂</Typography> :
+              <Table>
+                  <TableHead>
+                    <TableRow sx={{ bgcolor: "#f5f5f5" }}>
+                      <TableCell>Roll No.</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Phone</TableCell>
+                      
+                      <TableCell>Fee Status</TableCell>
+                      <TableCell>Mark</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {AbsentTrainees.map((trainee, index) => (
+                      <TableRow
+                        key={index}
+                        
+                        sx={{
+                          "&:nth-of-type(odd)": { bgcolor: "#fafafa" },
+                          "&:hover": { bgcolor:checkFeeStatus(trainee) ? "#FE9B9C": "#f0f0f0" },
+                          
+                        }}
+                        
+                      >
+                        <TableCell>{trainee.rollNumber}</TableCell>
+                        <TableCell>{trainee.name}</TableCell>
+                        <TableCell>{trainee.phone } </TableCell>
+                        
+                        <TableCell >{checkFeeStatus(trainee) ? "Pending ... " : "Paid"}</TableCell>
+                        <TableCell>
+                          <Button variant='contained' 
+                          color={checkFeeStatus(trainee) ?'error' : "primary"}  
+                          sx={{borderRadius:"100px" }} 
+                          
+                            onClick={()=>markAttendance(trainee._id)}
+                          ><Check /></Button>
 
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+              </Table>
+          }
+          
+          
         </TableContainer>
       </Box>
     </>

@@ -27,7 +27,7 @@ const AdminLayout = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
+    <Box sx={{ display: "flex", height: "100vh"  }}>
       {/* Sidebar */}
       <Box
         sx={{

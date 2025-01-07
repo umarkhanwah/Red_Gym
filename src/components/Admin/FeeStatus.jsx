@@ -13,10 +13,10 @@ import {
     TableRow,
 } from "@mui/material";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+
 
 const FeeStatus = () => {
-    const navigate  = useNavigate()
+    
     const authToken = localStorage.getItem('authToken')
     const [SearchQuery, setSearchQuery] = useState(""); 
     const [Trainees, setTrainees] = useState([])
@@ -52,7 +52,7 @@ const FeeStatus = () => {
         const date = new Date(dateString);
         const today = new Date( Date.now());
         if(today.getDate() == date.getDate()){
-            return "Date Has Reached"
+            return "Time to Pay Fees"
         }else if(today.getDate() > date.getDate()){
             
             return `Fees is Late ${today.getDate()- date.getDate()} days `
@@ -70,7 +70,7 @@ const FeeStatus = () => {
 
   const PayFees = (trainee) => {
     const date = new Date(Date.now());
-
+    
     axios.post('http://localhost:4000/admin/PayFees', {
         trainee   , date
     }, { headers: { 'authToken': authToken } })
@@ -116,7 +116,7 @@ const handleSearch = (e) => {
                 <Grid container spacing={2} sx={{ mt: 5 }}>
                     <Grid item xs={12} md={6} sx={{ marginLeft: "auto" }}>
                         <Box sx={{ display: "flex", gap: 1 }}>
-                            <TextField fullWidth label="Search Trainee"  onChange={handleSearch}/>
+                            <TextField fullWidth label="Search Trainee"  value={SearchQuery} onChange={handleSearch}/>
                             {/* <Button variant="contained" color="error">
                                     Search
                                 </Button> */}
@@ -124,7 +124,7 @@ const handleSearch = (e) => {
                     </Grid>
                 </Grid>
 
-                <TableContainer component={Paper} sx={{ mt: 3 }}>
+                <TableContainer component={Paper} sx={{ mt: 3  , borderRadius : '30px'}} >
                     <Table>
                         <TableHead>
                             <TableRow sx={{ bgcolor: "#f5f5f5" }}>
@@ -151,7 +151,7 @@ const handleSearch = (e) => {
                                     
                                     <Button variant='contained' 
                                                         color={checkDate(trainee.joinDate) ?'error' : "primary"}  
-                                                        sx={{borderRadius:"100px" }} 
+                                                        sx={{borderRadius:"100px"  , margin: "10px"}} 
                                                         
                                                           onClick={()=>PayFees(trainee._id)}
                                                         >Pay fees</Button>

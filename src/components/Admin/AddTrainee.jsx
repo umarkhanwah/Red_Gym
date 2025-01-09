@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ArrowForwardIos } from '@mui/icons-material';
 
-const AddTrainee = () => {
+const AddTrainee = ({setTrainee , setContent}) => {
     const navigate = useNavigate();
     const authToken = localStorage.getItem('authToken');
     const [Error, setError] = useState({
@@ -142,7 +143,7 @@ const AddTrainee = () => {
                         </Grid>
                     </Grid>
 
-                    <TableContainer component={Paper} sx={{ mt: 3 }}>
+                    <TableContainer component={Paper} sx={{ my: 3 }}>
                         <Table>
                             <TableHead>
                                 <TableRow sx={{ bgcolor: "#f5f5f5" }}>
@@ -150,6 +151,7 @@ const AddTrainee = () => {
                                     <TableCell>Name</TableCell>
                                     <TableCell>Phone</TableCell>
                                     <TableCell>Trainer</TableCell>
+                                    <TableCell>Actions</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -165,6 +167,10 @@ const AddTrainee = () => {
                                         <TableCell>{trainee.name}</TableCell>
                                         <TableCell>{trainee.phone}</TableCell>
                                         <TableCell>{trainee.gym?.trainerName || "N/A"}</TableCell>
+                                        <TableCell><Button variant='contained' color='primary' onClick={()=>{
+                                            setContent('TraineeDetails');
+                                            setTrainee(trainee)
+                                        }}>Show Details <ArrowForwardIos /> </Button></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

@@ -12,10 +12,12 @@ import { useNavigate } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import AddTrainee from "./AddTrainee";
 import FeeStatus from "./FeeStatus";
+import TraineeDetailPage from "./TraineeDetails";
 
 
 
 const AdminLayout = () => {
+  const [Trainee, setTrainee] = useState({});
   const [Content, setContent] = useState('Dashboard')
   const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ const AdminLayout = () => {
           style={{ width: "100%", cursor: "pointer" }}
         />
         <List>
-          {["Dashboard", "Add Trainee", "Fee Status"].map((item, index) => (
+          {["Dashboard", "All Trainees", "Fee Status"].map((item, index) => (
             <ListItem
               key={index}
               button
@@ -79,11 +81,14 @@ const AdminLayout = () => {
           {Content==="Dashboard" && 
              <Dashboard />
           }
-          {Content==="Add Trainee" && 
-             <AddTrainee />
+          {Content==="All Trainees" && 
+             <AddTrainee setTrainee={setTrainee} setContent={setContent} />
           }
           {Content==="Fee Status" && 
              <FeeStatus />
+          }
+          {Content==="TraineeDetails" && 
+             <TraineeDetailPage trainee={Trainee} />
           }
       
     </Box>

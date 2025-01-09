@@ -63,7 +63,7 @@ const Dashboard = () => {
         trainee   , date
     }, { headers: { 'authToken': authToken } })
         .then((res) => {
-            alert(res.data.message)
+            // alert(res.data.message)
             console.log(res);
             
 
@@ -72,20 +72,25 @@ const Dashboard = () => {
             console.log(e.response);
 
         })
-        fetchAbsentTrainees()
+        
+    fetchPresentTrainees();
+    fetchAbsentTrainees();
 
 }
 
 
-  const fetchPresentTrainees = ()=>{
-    axios.get('http://localhost:4000/admin/PresentTrainees' , {headers : {'authToken' : authToken}})
+  const fetchPresentTrainees = async()=>{
+    if(!authToken){
+      return navigate('/signin')
+    }
+    await axios.get('http://localhost:4000/admin/PresentTrainees' , {headers : {'authToken' : authToken}})
     .then(
       (res)=>{ 
         console.log(res.data);
         setPresentTrainees(res.data.trainees)
-        
-        
       }
+        
+        
     ).catch((e)=>console.error(e.response))
   }
   const fetchPaidTrainees = ()=>{

@@ -55,7 +55,7 @@ const FeeStatus = () => {
             return "Time to Pay Fees"
         }else if(today.getDate() > date.getDate()){
             
-            return `Fees is Late ${today.getDate()- date.getDate()} days `
+            return `${date.getDate()} - (Fees is Late ${today.getDate()- date.getDate()} days) `
         }else{
             return date.getDate()
         }

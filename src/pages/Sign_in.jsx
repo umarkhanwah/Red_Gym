@@ -22,7 +22,7 @@ const Sign_in = () => {
     }).then((res)=>{
       console.log(res.data);
       localStorage.setItem('authToken' , res.data.token)
-      navigate('/')
+      navigate('/dashboard')
       console.log(res.data.message);
       
     }).catch((e)=>{

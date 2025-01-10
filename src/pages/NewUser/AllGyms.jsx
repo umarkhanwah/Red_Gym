@@ -11,7 +11,7 @@ const ShowGyms = () => {
   const navigate = useNavigate();
   
   const fetchGyms = ()=>{
-    axios.get('http://localhost:4000/auth/showGyms')
+    axios.get('https://redgymapi.vercel.app/auth/showGyms')
     .then((res)=>{
       setAllGyms(res.data.AllGyms)
     }).catch((e)=>{

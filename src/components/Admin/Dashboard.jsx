@@ -26,7 +26,7 @@ import { Check } from '@mui/icons-material';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const Dashboard = () => {
+const Dashboard = ({setLoading}) => {
   const navigate  = useNavigate()
   
   const authToken = localStorage.getItem('authToken')
@@ -57,25 +57,26 @@ const Dashboard = () => {
 
 
   const markAttendance = (trainee) => {
+    setLoading(true);
     const date = new Date(Date.now());
 
-    axios.post('http://localhost:4000/admin/markAttendance', {
+    axios.post('https://redgymapi.vercel.app/admin/markAttendance', {
         trainee   , date
     }, { headers: { 'authToken': authToken } })
         .then((res) => {
             // alert(res.data.message)
             console.log(res);
-            
+            fetchPresentTrainees();
+            fetchAbsentTrainees();
+            setLoading(false);
 
         }).catch((e) => {
             alert(e.response.data.message)
             console.log(e.response);
-
+            setLoading(false);
         })
         
-    fetchPresentTrainees();
-    fetchAbsentTrainees();
-
+    
 }
 
 
@@ -83,7 +84,7 @@ const Dashboard = () => {
     if(!authToken){
       return navigate('/signin')
     }
-    await axios.get('http://localhost:4000/admin/PresentTrainees' , {headers : {'authToken' : authToken}})
+    await axios.get('https://redgymapi.vercel.app/admin/PresentTrainees' , {headers : {'authToken' : authToken}})
     .then(
       (res)=>{ 
         console.log(res.data);
@@ -94,7 +95,7 @@ const Dashboard = () => {
     ).catch((e)=>console.error(e.response))
   }
   const fetchPaidTrainees = ()=>{
-    axios.get('http://localhost:4000/admin/PaidFeesTrainees' , {headers : {'authToken' : authToken}})
+    axios.get('https://redgymapi.vercel.app/admin/PaidFeesTrainees' , {headers : {'authToken' : authToken}})
     .then(
       (res)=> {
         setPaidTrainees(res.data.trainees);
@@ -111,7 +112,7 @@ const Dashboard = () => {
       return navigate('/signin')
     }
 
-    axios.get('http://localhost:4000/admin/fetchUnpaidFeesTrainees' , {headers : {'authToken' : authToken}})
+    axios.get('https://redgymapi.vercel.app/admin/fetchUnpaidFeesTrainees' , {headers : {'authToken' : authToken}})
     .then((res)=>{
       setUnpaidTrainees(res.data.unpaidTrainees);
       console.log(res.data.message);
@@ -125,7 +126,7 @@ const Dashboard = () => {
       return navigate('/signin')
     }
 
-    axios.get('http://localhost:4000/admin/fetchAbsentTrainees' , {headers : {'authToken' : authToken}})
+    axios.get('https://redgymapi.vercel.app/admin/fetchAbsentTrainees' , {headers : {'authToken' : authToken}})
     .then((res)=>{
       setAbsentTrainees(res.data.absentTrainees);
       console.log(res.data);

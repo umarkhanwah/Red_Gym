@@ -15,19 +15,21 @@ import {
 import axios from 'axios';
 
 
-const FeeStatus = () => {
+const FeeStatus = ({setLoading}) => {
     
     const authToken = localStorage.getItem('authToken')
     const [SearchQuery, setSearchQuery] = useState(""); 
     const [Trainees, setTrainees] = useState([])
     
     const fetchUnpaidFeesTrainees = () => {
-        axios.get('http://localhost:4000/admin/fetchUnpaidFeesTrainees', {
+        
+        axios.get('https://redgymapi.vercel.app/admin/fetchUnpaidFeesTrainees', {
             headers: { 'authToken': authToken }
         })
         .then(res => {
             console.log(res.data);
             setTrainees(res.data.unpaidTrainees);
+            
         })
         .catch(e => console.error(e.response));
     };
@@ -40,7 +42,7 @@ const FeeStatus = () => {
     //       return navigate('/signin')
     //     }
     
-    //     axios.get('http://localhost:4000/admin/fetchTrainees' , {headers : {'authToken' : authToken}})
+    //     axios.get('https://redgymapi.vercel.app/admin/fetchTrainees' , {headers : {'authToken' : authToken}})
     //     .then((res)=>{
     //       setTrainees(res.data.trainees);
     //       console.log(res.data);
@@ -71,7 +73,7 @@ const FeeStatus = () => {
   const PayFees = (trainee) => {
     const date = new Date(Date.now());
     
-    axios.post('http://localhost:4000/admin/PayFees', {
+    axios.post('https://redgymapi.vercel.app/admin/PayFees', {
         trainee   , date
     }, { headers: { 'authToken': authToken } })
         .then((res) => {

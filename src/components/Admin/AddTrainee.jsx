@@ -14,7 +14,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ArrowForwardIos } from '@mui/icons-material';
 
-const AddTrainee = ({setTrainee , setContent}) => {
+const AddTrainee = ({setTrainee , setContent , setLoading}) => {
     const navigate = useNavigate();
     const authToken = localStorage.getItem('authToken');
     const [Error, setError] = useState({
@@ -26,23 +26,26 @@ const AddTrainee = ({setTrainee , setContent}) => {
     const [FilteredTrainees, setFilteredTrainees] = useState([]); // State for filtered trainees
 
     const fetchTrainees = () => {
+        
         if (!authToken) {
             return navigate('/signin');
         }
 
-        axios.get('http://localhost:4000/admin/fetchTrainees', { headers: { 'authToken': authToken } })
+        axios.get('https://redgymapi.vercel.app/admin/fetchTrainees', { headers: { 'authToken': authToken } })
             .then((res) => {
                 setTrainees(res.data.trainees);
                 setFilteredTrainees(res.data.trainees); // Initialize filtered trainees
                 console.log(res.data);
+                
             })
             .catch((e) => console.log(e.response));
     };
 
     const handleSubmit = (e) => {
+        setLoading(true);
         const { rollNumber, name, joinDate } = e.target;
 
-        axios.post('http://localhost:4000/admin/AddTrainee', {
+        axios.post('https://redgymapi.vercel.app/admin/AddTrainee', {
             rollNumber: rollNumber.value,
             name: name.value,
             joinDate: joinDate.value
@@ -52,15 +55,18 @@ const AddTrainee = ({setTrainee , setContent}) => {
                 console.log(res);
                 e.target.reset();
                 fetchTrainees(); // Refresh trainees after adding
+                setLoading(false);
             }).catch((e) => {
                 setError({ message: e.response.data.message, status: "error" });
                 console.log(e.response);
+                setLoading(false);
             });
 
         e.preventDefault();
     };
 
     const handleSearch = (e) => {
+        
         const query = e.target.value.toLowerCase();
         setSearchQuery(query);
 

@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { DeleteOutlineOutlined } from "@mui/icons-material";
 
-const TraineeDetailPage = ({  trainee}) => {
+const TraineeDetailPage = ({  trainee , setLoading}) => {
   const [traineeDetails, setTraineeDetails] = useState(trainee);
   const [bodyMeasurements, setBodyMeasurements] = useState([]);
   const [newMeasurement, setNewMeasurement] = useState({
@@ -31,7 +31,7 @@ const TraineeDetailPage = ({  trainee}) => {
   // Fetch trainee details
   // const fetchTraineeDetails = async () => {
   //   try {
-  //     const response = await axios.get(`http://localhost:4000/admin/trainee/${trainee._id}`);
+  //     const response = await axios.get(`https://redgymapi.vercel.app/admin/trainee/${trainee._id}`);
   //     setTraineeDetails(response.data);
   //   } catch (error) {
   //     console.error("Error fetching trainee details:", error);
@@ -41,7 +41,7 @@ const TraineeDetailPage = ({  trainee}) => {
   const fetchBodyMeasurements = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/admin/body-measurements/${trainee._id}`
+        `https://redgymapi.vercel.app/admin/body-measurements/${trainee._id}`
       );
       setBodyMeasurements(response.data);
     } catch (error) {
@@ -56,8 +56,8 @@ const TraineeDetailPage = ({  trainee}) => {
   
   
   const handleDelete = async(M_id)=>{
-    
-    await axios.get(`http://localhost:4000/admin/delete-measurement/${M_id}`)
+    setLoading(true);
+    await axios.get(`https://redgymapi.vercel.app/admin/delete-measurement/${M_id}`)
     .then(
       (res)=>
         alert(res.data.message))
@@ -65,15 +65,16 @@ const TraineeDetailPage = ({  trainee}) => {
         (error)=>
           console.log(error.response.data.message))
     fetchBodyMeasurements();
-        
+    setLoading(false)  
   }
 
   // Handle form submission
   const handleFormSubmit = async (e) => {
+    setLoading(true)
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:4000/admin/body-measurements/${trainee._id}`,
+        `https://redgymapi.vercel.app/admin/body-measurements/${trainee._id}`,
         {
           ...newMeasurement,
           date: new Date(),
@@ -84,6 +85,7 @@ const TraineeDetailPage = ({  trainee}) => {
     } catch (error) {
       console.error("Error adding new measurement:", error);
     }
+    setLoading(false)
   };
 
   return (

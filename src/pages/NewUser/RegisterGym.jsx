@@ -43,7 +43,7 @@ const RegisterGym = () => {
     e.preventDefault();
     
 
-    axios.post('http://localhost:4000/auth/Gym' , {
+    axios.post('https://redgymapi.vercel.app/auth/Gym' , {
       
       trainerName : formValues.trainerName , 
       phone : formValues.phone,
